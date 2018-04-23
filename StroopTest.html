@@ -5,6 +5,12 @@
     <title>Kellogg Stroop Test</title>
      <meta name="viewport" content="width=device-width">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+        $(function(){
+            $("#includedContent").load("index.html");
+        });
+    </script>
+
     <script type="text/javascript">
 
         var base = new Date();
@@ -250,6 +256,7 @@
     </style>
 </head>
 <body>
+<div id="includedContent"></div>
 <h1 class="h1">Kellogg Stroop Test Game</h1>
 <p>&nbsp;</p>
 <blockquote>
