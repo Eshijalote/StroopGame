@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kellogg Stroop Test</title>
+     <meta name="viewport" content="width=device-width">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        var base = new Date();
+        var currentFontColor = 'r';
+        var index = 1;
+        var nonStroopTime = 0;
+        var stroopTime = 0;
+        var stroopCount = 0;
+        var nonStroopCount = 0;
+        var stroop = 1;
+
+        var started = 0;
+        document.onkeypress = function (e)
+        {
+
+            var keynum;
+            var letter = '';
+
+
+
+            if(window.event) { // IE
+                keynum = e.keyCode;
+            } else if(e.which){ // Netscape/Firefox/Opera
+                keynum = e.which;
+            }
+
+            letter = String.fromCharCode(keynum);
+
+
+            if(started==0)
+            {
+                return;
+            }
+            else if(started==1)
+            {
+                currentFontColor = 'r';
+                started++;
+            }
+
+
+            if(currentFontColor != letter)
+            {
+                document.getElementById("error").style.display = "block";
+                return false;
+            }
+            else
+            {
+                document.getElementById("error").style.display = "none";
+
+                if(stroop == 2) // STROOP EFFECT
+                {
+                    stroopTime = stroopTime + (new Date() - base);
+                    stroopCount++
+                }
+                else // NON STROOP EFFECT
+                {
+                    nonStroopTime = nonStroopTime + (new Date() - base);
+                    nonStroopCount++;
+                }
+
+                if(index >= 20)
+                {
+
+                    document.getElementById("stroopmean").innerHTML = "" + Math.round(stroopTime/stroopCount);
+                    document.getElementById("nonstroopmean").innerHTML = "" + Math.round(nonStroopTime/nonStroopCount);
+
+                    document.getElementById("tablediv").style.display = "none";
+                    document.getElementById("game").style.display = "none";
+                    document.getElementById("result").style.display = "block";
+                    document.getElementById("startgame").style.display = "block";
+                    document.getElementById("result").scrollIntoView(true) ;
+
+                    $('html, body').animate({
+                        scrollTop: $("#result").offset().top
+                    }, 1000);
+                    started = 100;
+                }
+                else
+                {
+                    getRandomColor();
+                    setFontColor();
+                    index++;
+                    document.getElementById("questionCounter").innerHTML = index;
+                }
+
+                return false;
+
+            }
+
+
+
+
+        }
+
+        function setFontColor()
+        {
+            base = new Date();
+
+            if( Math.random()<0.5 ) // non-stroop
+            {
+                stroop = 1;
+
+                if(currentFontColor == 'r')
+                {
+                    document.getElementById("display").innerHTML = "RED";
+                    document.getElementById("display").color = "red";
+                }
+                else if(currentFontColor == 'g')
+                {
+                    document.getElementById("display").innerHTML = "GREEN";
+                    document.getElementById("display").color = "green";
+                }
+                else if(currentFontColor == 'b')
+                {
+                    document.getElementById("display").innerHTML = "BLUE";
+                    document.getElementById("display").color = "blue";
+                }
+                else if(currentFontColor == 'y')
+                {
+                    document.getElementById("display").innerHTML = "YELLOW";
+                    document.getElementById("display").color = "yellow";
+                }
+
+            }
+            else // stroop
+            {
+                stroop = 2;
+
+                var current = document.getElementById("display").innerHTML;
+
+                if(currentFontColor == 'r')
+                {
+                    document.getElementById("display").innerHTML = getColorDifferentFromFontColor("RED");
+                    document.getElementById("display").color = "red";
+                }
+                else if(currentFontColor == 'g')
+                {
+                    document.getElementById("display").innerHTML = getColorDifferentFromFontColor("GREEN");
+                    document.getElementById("display").color = "green";
+                }
+                else if(currentFontColor == 'b')
+                {
+                    document.getElementById("display").innerHTML = getColorDifferentFromFontColor("BLUE");
+                    document.getElementById("display").color = "blue";
+                }
+                else if(currentFontColor == 'y')
+                {
+                    document.getElementById("display").innerHTML = getColorDifferentFromFontColor("YELLOW");
+                    document.getElementById("display").color = "yellow";
+                }
+
+            }
+
+        }
+
+        function getRandomColor(){
+            var colors = ["r","g","b","y"];
+            var randomColor = colors[Math.floor(Math.random() * colors.length)];
+            currentFontColor = randomColor;
+            return randomColor;
+        }
+
+        function getColorDifferentFromFontColor(fontColor)
+        {
+            var colors = ["RED","GREEN","BLUE","YELLOW"];
+
+            for(var i = colors.length - 1; i >= 0; i--)
+            {
+                if(colors[i] === fontColor)
+                {
+                    colors.splice(i, 1);
+                }
+            }
+
+            var randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+            return randomColor;
+        }
+
+        function reset(){
+            document.getElementById('startgame').style.display = 'none';
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('tablediv').style.display = 'block';
+            document.getElementById('game').style.display = 'block';
+            document.getElementById('tablediv').scrollIntoView();
+            started=1;
+            currentFontColor = 'r';
+            index = 1;
+            nonStroopTime = 0;
+            stroopTime = 0;
+            stroopCount = 0;
+            nonStroopCount = 0;
+            stroop = 1;
+            document.getElementById("questionCounter").innerHTML = index;
+            document.getElementById("display").innerHTML = "RED";
+            document.getElementById("display").color = "red";
+        }
+
+
+
+    </script>
+    <style type="text/css">
+
+        .myButton {
+            color: rgb(255, 255, 255); font-size: 21px; line-height: 21px; padding: 14px; border-top-left-radius: 19px; border-top-right-radius: 19px; border-bottom-right-radius: 19px; border-bottom-left-radius: 19px; font-family: Georgia, serif; font-weight: normal; text-decoration: none; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-variant-east-asian: normal; font-variant-position: normal; text-transform: none; background-image: linear-gradient(to right, rgb(28, 110, 164) 0%, rgb(35, 136, 203) 50%, rgb(20, 78, 117) 100%); box-shadow: rgb(0, 0, 0) 5px 5px 15px 5px; border: 2px solid rgb(28, 110, 164); display: inline-block;}
+        .myButton:hover {
+            background: #1C6EA4; }
+        .myButton:active {
+            background: #144E75; }
+
+        .h1{
+            text-align: center;
+            color: #4e2a84;
+            font-weight: bold;
+            font-size: 34px;
+            margin-bottom: .5rem
+        }
+        .h2{
+            color: #ff0000;
+            font-weight: bold;
+        }
+        .table {
+            margin: 0 auto;
+            width: 400px;
+        }
+        .tablediv {
+            width: 600px;
+            height: 600px;
+            background-color: #ccffff;;
+            border: 2px solid #DCDCDC;
+            margin: 0 auto;
+            padding: 15px;
+
+        }
+        .nonstroopmean{
+            color: Red;
+            font-weight: bold;
+        }
+        .stroopmean{
+            color: Red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<h1 class="h1">Kellogg Stroop Test Game</h1>
+<p>&nbsp;</p>
+<blockquote>
+<p><span style="color: #000000;">The Stroop effect is a phenomenon that occurs when you must say the color of a word but not the name of the word. For example, blue might be printed in red and you must say the color rather than the word.&nbsp;</span>The stroop effect is a widely studied effect in psychology as it is harder and takes longer for the color of a word to be determined if the color in which it is printed in does not match the color name.</p>
+</blockquote>
+<p>&nbsp;</p>
+<blockquote>
+<p><span style="color: #0000ff;">This website allows you to play a fun stroop test game!</span></p>
+<p>&nbsp;</p>
+<h2 class="h2">How to Play</h2>
+<p><span style="color: #000000;">To play the game you need to use your keyboard to press keys. You will be shown words in either red(R), blue(B), green(G) or yellow(Y) color. Press the corresponding key for each color. For example, If the word "<span style="color: #0000ff;">red</span>" is shown printed in blue color, press the "B" key.<br /><br />You will be shown 20 words in the game. </span></p>
+<p>&nbsp;</p>
+<h2 class="h2">Game</h2>
+
+    <p>Put your fingers on the R, G, B and Y keys and press the start button to start the game.</p>
+
+    <div id="startgame" style="width: 210px; margin: 0 auto;"><br /><br /> <input class="myButton" type="button" value="Start" onclick="reset();"/></div>
+
+    <div id ="tablediv" class="tablediv" style="display:none;">
+
+
+    <table id="game" style="display:none;" class="table">
+        <tr>
+            <td colspan="5">
+                <br/><br/>
+                <div style="margin:0 auto; width:180px; border:3px solid gray; height:60px; line-height: 60px; text-align: center; font-size:200%;">
+
+                    <font id="display" color="red">RED</font>
+
+
+                </div>
+
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="10" >
+                <p>&nbsp;</p>
+
+                Press the keys depending on the color the word is printed in :
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <font color="red"><b>R: Red</b></font>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <font color="green"><b>G: Green</b></font>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <font color="blue"><b>B: Blue</b></font>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <font color="orange"><b>Y: Yellow</b></font>
+            </td>
+
+        </tr>
+        <tr>
+            <td colspan="5">
+                <br/><Br/>
+                <center>
+                    <span id="questionCounter">1</span>/20 done
+                </center>
+            </td>
+        </tr>
+    </table>
+    <div id="error" style="display:none;max-width:400px;margin:0 auto;">
+        <br/><br/>
+        Your answer was wrong. Try again!
+
+    </div>
+</div>
+    <div id ="result" style="display:none;">
+        <br/><br/>
+        <span style="color: #0000ff;">You have completed the stroop test.</span>
+        <br/><br/>
+        When the color name matched the color the word was printed in, your mean response time was <span id="nonstroopmean" class="nonstroopmean"></span> milliseconds.
+        <br/><br/>
+        When the color name did not match the color the word was printed in, your mean response time was <span id="stroopmean" class="stroopmean"></span> milliseconds.
+        <br/><br/>
+    </div>
+</blockquote>
+</body>
+</html>
