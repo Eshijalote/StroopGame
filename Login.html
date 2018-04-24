@@ -5,6 +5,12 @@
     <title>Login</title>
     <script src="https://cdn.auth0.com/js/lock/11.5.2/lock.min.js"></script>
     <script>
+        $(function(){
+            $("#includedContent").load("index.html");
+        });
+
+    </script>
+    <script>
         var clientId = "EKGzr6M1Daib8ws5KXovxwMVxIjf7acs";
         var domain = "gamelogin.auth0.com";
           var lock = new Auth0Lock(clientId, domain, {
@@ -47,6 +53,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 </head>
 <body>
-<h2>Welcome <span id="nick" class="nickname"></span></h2>
+<div id="includedContent"></div>
+
+<h2>Please Sign In using google to access the game</span></h2>
+
 </body>
 </html>
