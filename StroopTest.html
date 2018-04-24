@@ -28,6 +28,30 @@
         var stroop = 1;
 
         var started = 0;
+        
+                var clientId = "EKGzr6M1Daib8ws5KXovxwMVxIjf7acs";
+        var domain = "gamelogin.auth0.com";
+          var lock = new Auth0Lock(clientId, domain, {
+            auth: {
+                redirectUrl: 'https://eshijalote.github.io/StroopTest.html',
+                responseType: 'code',
+                params: {
+                    scope: 'openid profile' // Learn about scopes: https://auth0.com/docs/scopes
+                }
+            }
+        });
+       
+        lock.on("authenticated", function(authResult) {
+            lock.getUserInfo(authResult.accessToken, function(error, profile) {
+                if (error) {
+                    // Handle error
+                    return;
+                }
+                localStorage.setItem("accessToken", authResult.accessToken);
+                localStorage.setItem("profile", JSON.stringify(profile));
+                // Update DOM
+            });
+        });
 
         var profile = localStorage.getItem("profile");
         if(profile == null){
