@@ -5,7 +5,8 @@
     <title>Kellogg Stroop Test</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, height=device-height"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
+
     <meta name="google-signin-client_id" content="xxx.apps.googleusercontent.com">
 
     <script>
@@ -19,7 +20,8 @@
             });
         }
         function onSignIn(googleUser) {
-            var profile = googleUser.getBasicProfile();
+            var GoogleUser = GoogleAuth.currentUser.get();
+            var profile = GoogleUser.getBasicProfile();
             console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
             console.log('Name: ' + profile.getName());
             console.log('Image URL: ' + profile.getImageUrl());
@@ -41,6 +43,17 @@
         var stroop = 1;
 
         var started = 0;
+
+        if (auth2.isSignedIn.get()) {
+            var profile = auth2.currentUser.get().getBasicProfile();
+            console.log('ID: ' + profile.getId());
+            console.log('Full Name: ' + profile.getName());
+            console.log('Given Name: ' + profile.getGivenName());
+            console.log('Family Name: ' + profile.getFamilyName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail());
+        }
+
         document.onkeypress = function (e)
         {
 
