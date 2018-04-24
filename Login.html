@@ -15,9 +15,26 @@
             }
         });
         lock.show();
+
+        lock.on("authenticated", function(authResult) {
+            // Use the token in authResult to getUserInfo() and save it to localStorage
+            lock.getUserInfo(authResult.accessToken, function(error, profile) {
+                if (error) {
+                    // Handle error
+                    return;
+                }
+
+                document.getElementById('nick').textContent = profile.nickname;
+
+                localStorage.setItem('accessToken', authResult.accessToken);
+                localStorage.setItem('profile', JSON.stringify(profile));
+            });
+        });
     </script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 </head>
-
+<body>
+<h2>Welcome <span id="nick" class="nickname"></span></h2>
+</body>
 </html>
