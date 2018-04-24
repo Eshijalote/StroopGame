@@ -7,8 +7,7 @@
     <script>
         var clientId = "EKGzr6M1Daib8ws5KXovxwMVxIjf7acs";
         var domain = "gamelogin.auth0.com";
-  //      var lock = new Auth0Lock(clientId, domain);
-        var lock = new Auth0Lock(clientId, domain, {
+          var lock = new Auth0Lock(clientId, domain, {
             auth: {
                 redirectUrl: 'http://localhost:63342/Stroop/StroopTest.html',
                 responseType: 'token id_token',
@@ -42,20 +41,7 @@
                 alert("hello " + profile.name);
             }
         });
-        /*lock.on("authenticated", function(authResult) {
-            // Use the token in authResult to getUserInfo() and save it to localStorage
-            lock.getUserInfo(authResult.accessToken, function(error, profile) {
-                if (error) {
-                    // Handle error
-                    return;
-                }
 
-                document.getElementById('nick').textContent = profile.nickname;
-
-                localStorage.setItem('accessToken', authResult.accessToken);
-                localStorage.setItem('profile', JSON.stringify(profile));
-            });
-        });*/
     </script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1"/>

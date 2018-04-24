@@ -12,31 +12,30 @@
 
    <script >
        var profile = localStorage.getItem("profile");
-       /*var lock = new Auth0Lock('EKGzr6M1Daib8ws5KXovxwMVxIjf7acs', 'gamelogin.auth0.com', {
-           auth: {
-               redirectUrl: 'http://localhost:63342/Stroop/index.html',
-               responseType: 'code',
-               params: {
-                   scope: 'openid email' // Learn about scopes: https://auth0.com/docs/scopes
-               }
+       var jsonProfile = JSON.parse(profile);
+
+       function onWindowLoad() {
+           if (profile !== null && profile !== '') {
+               document.getElementById('name').textContent = "Welcome " +  jsonProfile.given_name + " " + jsonProfile.family_name;
+
+           }else{
+               document.getElementById('logout').style.display="none";
            }
-       });
-       lock.on("authenticated", function(authResult) {
-           // Use the token in authResult to getUserInfo() and save it to localStorage
-           lock.getUserInfo(authResult.accessToken, function(error, profile) {
-               if (error) {
-                   // Handle error
-                   return;
-               }*/
-       if(profile !==null && profile !== ''){
-           document.getElementById('name').textContent = "Welcome" + profile.name;
+       }
+       if (window.addEventListener)
+           window.addEventListener("load", onWindowLoad(), false);
+       else if (window.attachEvent)
+           window.attachEvent("onload", onWindowLoad());
+       else window.onload = onWindowLoad();
+
+       function checkUserLoggedIn(){
+           if (profile !== null && profile !== '') {
+               window.location.href  = "StroopTest.html";
+           }else{
+               window.location.href = "Login.html";
+           }
        }
 
-/*
-               localStorage.setItem('accessToken', authResult.accessToken);
-               localStorage.setItem('profile', JSON.stringify(profile));
-           });
-       });*/
    </script>
    <title>CSS MenuMaker</title>
 </head>
@@ -55,7 +54,8 @@
          </li>
          <li><a href='#'>Stroop Game</a>
             <ul>
-               <li><a href='Login.html'>Single Player Stroop Game</a></li>
+
+               <li><a href="javascript:checkUserLoggedIn()" >Single Player Stroop Game</a></li>
                <li><a href='#'>Multi Player Stroop Game</a></li>
             </ul>
          </li>
@@ -63,6 +63,7 @@
    </li>
    <li><a href='AboutUS.html'>About</a></li>
    <li><a href='ContactUs.html'>Contact</a></li>
+    <li><a id = "logout" href='https://gamelogin.auth0.com/v2/logout?returnTo=https%3A%2F%2Feshijalote.github.io/Home.html'>Logout</a></li>
 </ul>
 </div>
 
