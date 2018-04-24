@@ -5,29 +5,12 @@
     <title>Kellogg Stroop Test</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, height=device-height"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
-
-    <meta name="google-signin-client_id" content="xxx.apps.googleusercontent.com">
 
     <script>
         $(function(){
             $("#includedContent").load("index.html");
         });
-        function signOut() {
-            var auth2 = gapi.auth2.getAuthInstance();
-            auth2.signOut().then(function () {
-                console.log('User signed out.');
-            });
-        }
-        function onSignIn(googleUser) {
-            var GoogleUser = GoogleAuth.currentUser.get();
-            var profile = GoogleUser.getBasicProfile();
-            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-            console.log('Name: ' + profile.getName());
-            console.log('Image URL: ' + profile.getImageUrl());
-            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-            document.getElementById("demo").innerHTML = profile.getName(0);
-        }
+
 
     </script>
 
@@ -44,15 +27,7 @@
 
         var started = 0;
 
-        if (auth2.isSignedIn.get()) {
-            var profile = auth2.currentUser.get().getBasicProfile();
-            console.log('ID: ' + profile.getId());
-            console.log('Full Name: ' + profile.getName());
-            console.log('Given Name: ' + profile.getGivenName());
-            console.log('Family Name: ' + profile.getFamilyName());
-            console.log('Image URL: ' + profile.getImageUrl());
-            console.log('Email: ' + profile.getEmail());
-        }
+
 
         document.onkeypress = function (e)
         {
@@ -243,7 +218,7 @@
 
 
     </script>
-    <style type="text/css">
+       <style type="text/css">
 
         .myButton {
             color: rgb(255, 255, 255); font-size: 21px; line-height: 21px; padding: 14px; border-top-left-radius: 19px; border-top-right-radius: 19px; border-bottom-right-radius: 19px; border-bottom-left-radius: 19px; font-family: Georgia, serif; font-weight: normal; text-decoration: none; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-variant-east-asian: normal; font-variant-position: normal; text-transform: none; background-image: linear-gradient(to right, rgb(28, 110, 164) 0%, rgb(35, 136, 203) 50%, rgb(20, 78, 117) 100%); box-shadow: rgb(0, 0, 0) 5px 5px 15px 5px; border: 2px solid rgb(28, 110, 164); display: inline-block;}
@@ -290,9 +265,6 @@
 </head>
 <body>
 <div id="includedContent"></div>
-<a href="#" onclick="signOut();">Sign out</a>
-
-<p id="demo"></p>
 
 <h1 class="h1">Kellogg Stroop Test Game</h1>
 <p>&nbsp;</p>
