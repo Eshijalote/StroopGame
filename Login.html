@@ -10,9 +10,10 @@
         var domain = "gamelogin.auth0.com";
           var lock = new Auth0Lock(clientId, domain, {
             auth: {
-                responseType: 'code',
-                params: {
-                    scope: 'openid profile' // Learn about scopes: https://auth0.com/docs/scopes
+                    responseType: 'code',
+                    redirectUrl: 'https://eshijalote.github.io/StroopTest.html',
+             params: {
+                  scope: 'openid profile' // Learn about scopes: https://auth0.com/docs/scopes
                 }
 
 
