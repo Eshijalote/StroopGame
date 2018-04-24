@@ -11,7 +11,7 @@
           var lock = new Auth0Lock(clientId, domain, {
             auth: {
                 redirectUrl: 'https://eshijalote.github.io/StroopTest.html',
-                responseType: 'token',
+                responseType: 'code',
                 params: {
                     scope: 'openid profile' // Learn about scopes: https://auth0.com/docs/scopes
                 }
