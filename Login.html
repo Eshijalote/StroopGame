@@ -3,20 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <script src="https://cdn.auth0.com/js/lock/11.3.0/lock.min.js"></script>
+    <script src="https://cdn.auth0.com/js/lock/11.5.2/lock.min.js"></script>
     <script>
-        var lock = new Auth0Lock('EKGzr6M1Daib8ws5KXovxwMVxIjf7acs', 'gamelogin.auth0.com', {
+        var clientId = "EKGzr6M1Daib8ws5KXovxwMVxIjf7acs";
+        var domain = "gamelogin.auth0.com";
+  //      var lock = new Auth0Lock(clientId, domain);
+        var lock = new Auth0Lock(clientId, domain, {
             auth: {
-                redirectUrl: 'https://eshijalote.github.io/StroopTest.html',
-                responseType: 'code',
+                redirectUrl: 'http://localhost:63342/Stroop/StroopTest.html',
+                responseType: 'token id_token',
                 params: {
-                    scope: 'openid email' // Learn about scopes: https://auth0.com/docs/scopes
+                    scope: 'openid profile email' // Learn about scopes: https://auth0.com/docs/scopes
                 }
+
+
             }
+
         });
         lock.show();
 
         lock.on("authenticated", function(authResult) {
+            lock.getUserInfo(authResult.accessToken, function(error, profile) {
+                if (error) {
+                    // Handle error
+                    return;
+                }
+
+                localStorage.setItem("accessToken", authResult.accessToken);
+                localStorage.setItem("profile", JSON.stringify(profile));
+
+                // Update DOM
+            });
+
+        });
+
+        lock.getUserInfo(accessToken, function(error, profile) {
+            if (!error) {
+                alert("hello " + profile.name);
+            }
+        });
+        /*lock.on("authenticated", function(authResult) {
             // Use the token in authResult to getUserInfo() and save it to localStorage
             lock.getUserInfo(authResult.accessToken, function(error, profile) {
                 if (error) {
@@ -29,7 +55,7 @@
                 localStorage.setItem('accessToken', authResult.accessToken);
                 localStorage.setItem('profile', JSON.stringify(profile));
             });
-        });
+        });*/
     </script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
