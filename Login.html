@@ -113,19 +113,19 @@
         }
          });
 
-        /*window.onload = function() {
-            var lock = new Auth0Lock(clientId, domain);
-            lock.on("hash_parsed", function(authResult) {
+        window.onload = function() {
+           lock.on("hash_parsed", function(authResult) {
                 if (authResult == null && localStorage.getItem('idToken') == null) {
                     lock.show();
-                } else {
+                }
                     localStorage.setItem('idToken', authResult.idToken);
                     localStorage.setItem("profile", JSON.stringify(profile));
                     profile = localStorage.getItem("profile");
                     console.log('success');
-                }
+
             });
         }
+        /*
         function onWindowLoad() {
             lock.on("authenticated", function(authResult) {
                 lock.getUserInfo(authResult.accessToken, function(error, profile) {
