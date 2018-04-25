@@ -6,14 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, height=device-height"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://cdn.auth0.com/js/lock/11.5.2/lock.min.js"></script>
-
-
     <script>
-        $(function(){
-            $("#includedContent").load("index.html");
-        });
 
-    </script>
+        $(document).ready(function() {
+            $(function () {
+                $("#includedContent").load("index.html");
+            });
+        });
+</script>
 
     <script type="text/javascript">
 
@@ -31,31 +31,92 @@
 
         var clientId = "EKGzr6M1Daib8ws5KXovxwMVxIjf7acs";
         var domain = "gamelogin.auth0.com";
-        var lock = new Auth0Lock(clientId, domain);
+        var lock = new Auth0Lock(clientId, domain, {
 
-        lock.on("authenticated", function(authResult) {
-            lock.getUserInfo(authResult.accessToken, function(error, profile) {
-                if (error) {
-                    // Handle error
-                    return;
+            auth: {
+
+                closable: false,
+                redirectUrl: 'http://localhost:63342/Stroop/StroopTest.html',
+                responseType: 'token',
+                params: {
+                    scope: 'openid profile email' // Learn about scopes: https://auth0.com/docs/scopes
                 }
 
-                localStorage.setItem("accessToken", authResult.accessToken);
-                localStorage.setItem("profile", JSON.stringify(profile));
 
-                // Update DOM
+            }
+
+        });
+        var profile = localStorage.getItem("profile");
+
+        window.onload = function() {
+               lock = new Auth0Lock(clientId, domain, {
+
+                  auth: {
+
+                      closable: false,
+                      redirectUrl: 'http://localhost:63342/Stroop/StroopTest.html',
+                      responseType: 'token id_token',
+                      params: {
+                          scope: 'openid profile email' // Learn about scopes: https://auth0.com/docs/scopes
+                      }
+
+
+                  }
+
+              });
+              lock.on("hash_parsed", function(authResult) {
+                  if (authResult == null && localStorage.getItem('idToken') == null) {
+                      lock.show();
+                  }
+                      localStorage.setItem('idToken', authResult.idToken);
+                      localStorage.setItem("profile", JSON.stringify(profile));
+                      profile = localStorage.getItem("profile");
+                      console.log('success');
+
+              });
+          }
+
+          lock.on("authenticated", function(authResult) {
+              lock.getUserInfo(authResult.accessToken, function(error, profile) {
+                  if (error) {
+                      window.location.href = "Home.html";
+                      return;
+                  }
+
+                  localStorage.setItem("accessToken", authResult.accessToken);
+                  localStorage.setItem("profile", JSON.stringify(profile));
+                  profile = localStorage.getItem("profile");
+                  console.log('success');
+                  // Update DOM
+              });
+
+          });
+
+
+
+        if (profile == "null" || profile == null) {
+
+            lock.show();
+           // window.location.href = "Login.html";
+        }
+
+        $(document).ready(function() {
+            $(function(){
+                $("#includedContent").load("index.html");
             });
+
+
+
 
         });
 
 
-        var profile = localStorage.getItem("profile");
+        document.addEventListener('readystatechange', function(){
 
-
-        if(profile === null){
-
-
-        }
+            if (document.readyState === "complete"){
+                $("#includedContent").reload();
+            }
+        });
 
         document.onkeypress = function (e)
         {
@@ -292,6 +353,8 @@
     </style>
 </head>
 <body>
+<h2> <span id="name" class="name"></span></h2>
+
 <div id="includedContent"></div>
 
 <h1 class="h1">Kellogg Stroop Test Game</h1>

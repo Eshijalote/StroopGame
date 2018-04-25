@@ -15,40 +15,97 @@
        var clientId = "EKGzr6M1Daib8ws5KXovxwMVxIjf7acs";
        var domain = "gamelogin.auth0.com";
 
-       var lock = new Auth0Lock(clientId, domain);
-
-       lock.on("authenticated", function(authResult) {
-           lock.getUserInfo(authResult.accessToken, function(error, profile) {
-               if (error) {
-                   // Handle error
-                   return;
-               }
-
-               localStorage.setItem("accessToken", authResult.accessToken);
-               localStorage.setItem("profile", JSON.stringify(profile));
-
-               // Update DOM
-           });
-
-       });
        var profile = localStorage.getItem("profile");
        var jsonProfile = JSON.parse(profile);
+       var lock = new Auth0Lock(clientId, domain, {
+
+           auth: {
+
+               closable: false,
+               redirectUrl: 'http://localhost:63342/Stroop/StroopTest.html',
+               responseType: 'token id_token',
+               params: {
+                   scope: 'openid profile email' // Learn about scopes: https://auth0.com/docs/scopes
+               }
+
+
+           }
+
+       });
+
+       window.onload = function() {
+            lock = new Auth0Lock(clientId, domain, {
+
+               auth: {
+
+                   closable: false,
+                   redirectUrl: 'http://localhost:63342/Stroop/StroopTest.html',
+                   responseType: 'token id_token',
+                   params: {
+                       scope: 'openid profile email' // Learn about scopes: https://auth0.com/docs/scopes
+                   }
+
+
+               }
+
+           });
+           lock.on("hash_parsed", function(authResult) {
+
+               localStorage.setItem('idToken', authResult.idToken);
+               localStorage.setItem("profile", JSON.stringify(profile));
+               profile = localStorage.getItem("profile");
+               jsonProfile = JSON.parse(profile);
+               console.log('success');
+
+           });
+
+
+           lock.on("authenticated", function(authResult) {
+               lock.getUserInfo(authResult.accessToken, function(error, profile) {
+                   if (error) {
+                       // Handle error
+                       return;
+                   }
+
+                   localStorage.setItem("accessToken", authResult.accessToken);
+                   localStorage.setItem("profile", JSON.stringify(profile));
+                   profile = localStorage.getItem("profile");
+                   jsonProfile = JSON.parse(profile);
+                   // Update DOM
+               });
+
+           });
+       }
 
        function logOut(){
-          localStorage.removeItem(profile);
+          localStorage.removeItem("profile");
           window.localStorage.clear();
           window.location.href  = "https://gamelogin.auth0.com/v2/logout?returnTo=https%3A%2F%2Feshijalote.github.io/Home.html";
           document.getElementById('logout').style.display="none";
        }
-       $(window).bind("load", function() {
+       /*$(window).bind("load", function() {
            if (profile !== null && profile !== '') {
                document.getElementById('name').textContent = "Welcome " +  jsonProfile.given_name + " " + jsonProfile.family_name;
 
            }
+       });*/
+
+       $(document).ready(function() {
+           if (profile !== "null" && profile !== '' & profile !==null) {
+               jsonProfile = JSON.parse(profile);
+               $('#name').innerHTML = "Welcome " + jsonProfile.given_name + " " + jsonProfile.family_name;
+               $('#name').fadeIn(2200)
+           }else{
+               document.getElementById('logout').style.display="none";
+
+           }
+
+
        });
 
        function onWindowLoad() {
-           if (profile !== null && profile !== '') {
+           if (profile !== "null" && profile !== '') {
+               jsonProfile = JSON.parse(profile);
                document.getElementById('name').textContent = "Welcome " +  jsonProfile.given_name + " " + jsonProfile.family_name;
 
            }else{
@@ -56,6 +113,19 @@
 
            }
        }
+
+       document.addEventListener('readystatechange', function(){
+          if (document.readyState === "complete"){
+              if (profile !== "null" && profile !== '') {
+                  jsonProfile = JSON.parse(profile);
+                  document.getElementById('name').textContent = "Welcome " +  jsonProfile.given_name + " " + jsonProfile.family_name;
+
+              }else{
+                  document.getElementById('logout').style.display="none";
+
+              }
+          }
+       });
        if (window.addEventListener)
            window.addEventListener("load", onWindowLoad(), false);
        else if (window.attachEvent)
@@ -74,7 +144,7 @@
 
 </head>
 <body>
-<h2> <span id="name" class="name"></span></h2>
+<h2> <div id="name" class="name" onload="onWindowLoad()"></div></h2>
 <div id='cssmenu'>
 <ul>
    <li><a href='Home.html'>Home</a></li>
@@ -100,6 +170,7 @@
     <li><a id = "logout" href="#" onclick="javascript:logOut();">Logout</a></li>
 </ul>
 </div>
+
 
 </body>
 <html>
