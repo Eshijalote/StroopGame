@@ -40,6 +40,13 @@
           window.location.href  = "https://gamelogin.auth0.com/v2/logout?returnTo=https%3A%2F%2Feshijalote.github.io/Home.html";
           document.getElementById('logout').style.display="none";
        }
+       $(window).bind("load", function() {
+           if (profile !== null && profile !== '') {
+               document.getElementById('name').textContent = "Welcome " +  jsonProfile.given_name + " " + jsonProfile.family_name;
+
+           }
+       });
+
        function onWindowLoad() {
            if (profile !== null && profile !== '') {
                document.getElementById('name').textContent = "Welcome " +  jsonProfile.given_name + " " + jsonProfile.family_name;

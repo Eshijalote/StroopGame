@@ -10,7 +10,7 @@
         var domain = "gamelogin.auth0.com";
           var lock = new Auth0Lock(clientId, domain, {
             auth: {
-                redirectUrl: 'http://localhost:63342/Stroop/StroopTest.html',
+              //  redirectUrl: 'http://localhost:63342/Stroop/StroopTest.html',
                 responseType: 'token id_token',
                 params: {
                     scope: 'openid profile email' // Learn about scopes: https://auth0.com/docs/scopes
@@ -37,38 +37,15 @@
 
         });
 
-        lock.show();
 
-        var clientId = "EKGzr6M1Daib8ws5KXovxwMVxIjf7acs";
-        var domain = "gamelogin.auth0.com";
-        var lock = new Auth0Lock(clientId, domain, {
-            auth: {
-                redirectUrl: 'http://localhost:63342/Stroop/StroopTest.html',
-                responseType: 'token id_token',
-                params: {
-                    scope: 'openid profile email' // Learn about scopes: https://auth0.com/docs/scopes
-                }
+        var profile = localStorage.getItem("profile");
+        if (profile !== null && profile !== '') {
+            window.location.href  = "StroopTest.html";
+        }else{
+            lock.show();
+        }
 
 
-            }
-
-        });
-
-
-        lock.on("authenticated", function(authResult) {
-            lock.getUserInfo(authResult.accessToken, function(error, profile) {
-                if (error) {
-                    // Handle error
-                    return;
-                }
-
-                localStorage.setItem("accessToken", authResult.accessToken);
-                localStorage.setItem("profile", JSON.stringify(profile));
-
-                // Update DOM
-            });
-
-        });
 
     </script>
 
