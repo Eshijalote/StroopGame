@@ -11,13 +11,34 @@
 
 
    <script >
+
+       var clientId = "EKGzr6M1Daib8ws5KXovxwMVxIjf7acs";
+       var domain = "gamelogin.auth0.com";
+
+       var lock = new Auth0Lock(clientId, domain);
+
+       lock.on("authenticated", function(authResult) {
+           lock.getUserInfo(authResult.accessToken, function(error, profile) {
+               if (error) {
+                   // Handle error
+                   return;
+               }
+
+               localStorage.setItem("accessToken", authResult.accessToken);
+               localStorage.setItem("profile", JSON.stringify(profile));
+
+               // Update DOM
+           });
+
+       });
        var profile = localStorage.getItem("profile");
        var jsonProfile = JSON.parse(profile);
 
        function logOut(){
-           localStorage.removeItem(profile);
-           localStorage.clear();
-           window.location.href  = "https://gamelogin.auth0.com/v2/logout?returnTo=https%3A%2F%2Feshijalote.github.io/Home.html";
+          localStorage.removeItem(profile);
+          window.localStorage.clear();
+          window.location.href  = "https://gamelogin.auth0.com/v2/logout?returnTo=https%3A%2F%2Feshijalote.github.io/Home.html";
+          document.getElementById('logout').style.display="none";
        }
        function onWindowLoad() {
            if (profile !== null && profile !== '') {
@@ -43,7 +64,7 @@
        }
 
    </script>
-   <title>CSS MenuMaker</title>
+
 </head>
 <body>
 <h2> <span id="name" class="name"></span></h2>
@@ -61,7 +82,7 @@
          <li><a href='#'>Stroop Game</a>
             <ul>
 
-               <li><a href="javascript:checkUserLoggedIn()" >Single Player Stroop Game</a></li>
+               <li><a href="#" onclick="javascript:checkUserLoggedIn();" >Single Player Stroop Game</a></li>
                <li><a href='#'>Multi Player Stroop Game</a></li>
             </ul>
          </li>
@@ -69,7 +90,7 @@
    </li>
    <li><a href='AboutUS.html'>About</a></li>
    <li><a href='ContactUs.html'>Contact</a></li>
-    <li><a id = "logout" href="javascript:logOut()">Logout</a></li>
+    <li><a id = "logout" href="#" onclick="javascript:logOut();">Logout</a></li>
 </ul>
 </div>
 
