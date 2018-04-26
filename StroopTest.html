@@ -94,7 +94,7 @@
 
         lock.checkSession({}, function (error, authResult) {
             if (error || !authResult) {
-                
+
             } else {
                 // user has an active session, so we can use the accessToken directly.
                 lock.getUserInfo(authResult.accessToken, function (error, profile) {
@@ -108,7 +108,7 @@
 
            if (profile == "null" || profile == null) {
 
-                lock.show();
+          //      lock.show();
                // window.location.href = "Login.html";
             }
 
@@ -357,6 +357,7 @@
             stroopCount = 0;
             nonStroopCount = 0;
             stroop = 1;
+            base = new Date();
             document.getElementById("questionCounter").innerHTML = index;
             document.getElementById("display").innerHTML = "RED";
             document.getElementById("display").color = "red";
